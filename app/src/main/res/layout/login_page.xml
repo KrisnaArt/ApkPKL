@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login"
+    android:background="#1a936f">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:layout_centerHorizontal="true"
+        android:maxWidth="@dimen/_180sdp"
+        android:maxHeight="@dimen/_180sdp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/logo"/>
+
+    <TextView
+        android:id="@+id/appname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/logo"
+        android:textColor="#FFFFFF"
+        android:text="AMBULANCE APP"
+        android:textSize="@dimen/_30ssp"/>
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="@dimen/_235sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_below="@id/appname"
+        android:background="@drawable/text_box"
+        android:drawableLeft="@drawable/ic_action_person"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="text"
+        android:textSize="@dimen/_13ssp"
+        android:textColorHint="#802E4053"
+        android:textColor="#D9000000"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/pass"
+        android:layout_width="@dimen/_235sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_below="@id/username"
+        android:background="@drawable/text_box"
+        android:drawableLeft="@drawable/ic_action_pass"
+        android:ems="10"
+        android:hint="Password"
+        android:textSize="@dimen/_13ssp"
+        android:textColorHint="#802E4053"
+        android:textColor="#D9000000"
+        android:inputType="textPassword"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_shape_capsule"
+        android:padding="8dp"
+        android:text="Masuk"
+        android:textColor="@drawable/btn_txt_selector"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_below="@id/pass"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
