@@ -36,7 +36,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.example.ApkPKL.MapsActivity"
+            android:name="com.example.ApkPKL.ui.maps.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity
             android:name="com.example.ApkPKL.login"
@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.ApkPKL.MainActivity"
+            android:name="com.example.ApkPKL.ui.MainActivity"
             android:label="Main Activity"
             android:theme="@style/AppTheme.NoActionBar" />
 

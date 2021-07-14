@@ -1,4 +1,4 @@
-package com.example.ApkPKL;
+package com.example.ApkPKL.ui;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,13 +15,16 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.androidnetworking.AndroidNetworking;
+import com.example.ApkPKL.App;
+import com.example.ApkPKL.R;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     private TextView username, email, jenisAmbulan;
     private ImageView img;
-
+    private String emailFromIntent, lokasiFromIntent, tipeFromIntent;
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
@@ -31,14 +34,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        AndroidNetworking.initialize(App.getContext());
-
+        init();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_map, R.id.nav_history,  R.id.nav_profile, R.id.nav_about_us)
+                R.id.nav_home, R.id.nav_map, R.id.nav_history,  R.id.nav_profile,
+                R.id.nav_about_us)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -52,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
         jenisAmbulan = headerView.findViewById(R.id.tipe_nav);
         img = headerView.findViewById(R.id.profileFoto);
         Bundle bundle = getIntent().getExtras();
-        String emailFromIntent = bundle.getString("USERNAME");
-        String lokasiFromIntent = bundle.getString("LOK");
-        String tipeFromIntent = bundle.getString("AMBULAN");
+        emailFromIntent = bundle.getString("USERNAME");
+        lokasiFromIntent = bundle.getString("LOK");
+        tipeFromIntent = bundle.getString("AMBULAN");
 
         username.setText(emailFromIntent);
         email.setText(lokasiFromIntent);
@@ -74,5 +77,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void init(){
+        AndroidNetworking.initialize(App.getContext());
     }
 }

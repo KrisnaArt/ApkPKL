@@ -173,7 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_gravity="center"
-            android:text="Status"
+            android:text="Jenis Ambulan"
             android:textColor="#FFFF"
             android:textSize="@dimen/_23ssp"/>
 
@@ -189,25 +189,6 @@
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="#FFFF"
             app:layout_constraintTop_toBottomOf="@+id/email_layout" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ambulan_layout"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button_logout"
-            android:layout_width="@dimen/_85sdp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_30sdp"
-            android:background="@drawable/btn_shape_capsule"
-            android:textColor="@drawable/btn_txt_selector"
-            android:text="Keluar" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

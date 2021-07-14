@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/fragment_Maps"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +11,7 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_300sdp"
+        android:layout_height="@dimen/_310sdp"
         app:layout_constraintBottom_toTopOf="@+id/tes2"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -20,41 +21,42 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_285sdp"
         android:background="#1a936f"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/map"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintBottom_toBottomOf="@id/map">
 
         <LinearLayout
-            android:id="@+id/statusLayout"
+            android:id="@+id/StatusA_Layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_5sdp">
+            android:layout_marginRight="@dimen/_20sdp">
 
             <TextView
+                android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:text="Status"
-                android:textSize="@dimen/_15ssp"
-                android:textColor="#FFFF"/>
+                android:text="Status :"
+                android:textSize="@dimen/_13ssp"
+                android:textColor="#FFFFFF"/>
 
-            <Switch
-                android:id="@+id/stat"
+            <TextView
+                android:id="@+id/statusA"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:text=""
+                android:textSize="@dimen/_10ssp"
+                android:textColor="#FFFFFF"/>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/Nama_Layout"
-            android:layout_marginTop="@dimen/_3sdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_4sdp"
             android:orientation="vertical"
-            android:layout_below="@id/statusLayout">
+            android:layout_below="@id/StatusA_Layout">
 
             <TextView
                 android:id="@+id/tes3"

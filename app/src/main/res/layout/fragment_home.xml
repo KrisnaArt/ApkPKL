@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/fragment_Home"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#1a936f">
+
+    <TextView
+        android:id="@+id/home"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="@dimen/_40ssp"
+        android:textColor="#FFFF"
+        android:text="Home" />
+
+    <TextView
+        android:id="@+id/stat"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/home"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="@dimen/_20ssp"
+        android:textColor="#FFFF"
+        android:text="Silahkan Pilih Status" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:entries="@array/list"
+        android:background="#E6FFFFFF"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stat"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginRight="3dp"
+        android:gravity="center"
+        android:spinnerMode="dropdown"
+        />
+
+    <TextView
+        android:id="@+id/paramedis"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/spinner1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="@dimen/_20ssp"
+        android:textColor="#FFFF"
+        android:text="Silahkan Masukan \nNama Paramedis"
+        android:gravity="center_horizontal"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/namaPerawat"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/paramedis"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:drawableLeft="@drawable/ic_action_person"
+        android:background="@drawable/text_box"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Nama Perawat"
+        android:visibility="invisible"/>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/namaPerawat"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_simpan"
+            android:layout_width="@dimen/_85sdp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_shape_capsule"
+            android:textColor="@drawable/btn_txt_selector"
+            android:text="Simpan" />
+
+        <Button
+            android:id="@+id/button_keluar"
+            android:layout_width="@dimen/_85sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:background="@drawable/btn_shape_capsule"
+            android:textColor="@drawable/btn_txt_selector"
+            android:text="Keluar" />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

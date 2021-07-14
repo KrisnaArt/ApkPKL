@@ -12,10 +12,18 @@
     <string name="error_pass">Password did not match</string>
     <string name="error_valid_email_password">Wrong Email or Password</string>
 
+    <string name="menu_home">Home</string>
     <string name="menu_map">Peta</string>
     <string name="menu_profile">Profil</string>
     <string name="menu_history">Riwayat</string>
     <string name="menu_about_us">Tentang Kami</string>
     <string name="title_activity_maps">Map</string>
     <string name="register"><u>Register Here</u></string>
+
+    <string-array name="list">
+        <item>Silahkan Pilih Status</item>
+        <item>Maintenance</item>
+        <item>Tidak Ada Paramedis</item>
+        <item>Ada Paramedis</item>
+    </string-array>
 </resources>

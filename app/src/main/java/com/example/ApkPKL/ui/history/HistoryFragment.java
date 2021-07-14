@@ -36,6 +36,7 @@ public class HistoryFragment extends Fragment {
     private OrderRecyclerAdapter orderRecyclerAdapter;
     private HistoryViewModel historyViewModel;
     private View root;
+    private String emailFromIntent;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -64,14 +65,14 @@ public class HistoryFragment extends Fragment {
         recyclerViewOrder.setAdapter(orderRecyclerAdapter);
 
         Bundle bundle = getActivity().getIntent().getExtras();
-        final String emailFromIntent = bundle.getString("USERNAME");
+        emailFromIntent = bundle.getString("USERNAME");
 
-        history(emailFromIntent);
+        history();
     }
 
-    private void history(String a){
+    private void history(){
         AndroidNetworking.get("http://panggilambulan.my.id/api/pasien?user_ambulan={user_ambulan}&token={token}")
-                .addQueryParameter("user_ambulan", a)
+                .addQueryParameter("user_ambulan", emailFromIntent)
                 .addQueryParameter("token", "mant4pgans")
                 .setTag("test")
                 .setPriority(Priority.HIGH)
@@ -95,17 +96,6 @@ public class HistoryFragment extends Fragment {
                                 );
                                 listOrder.add(item);
                             }
-                            /*pasien item = new pasien(
-                                    response.getInt("id"),
-                                    response.getString("nama"),
-                                    response.getString("kontak"),
-                                    response.getString("lokasi"),
-                                    response.getString("tujuan"),
-                                    response.getString("lainnya"),
-                                    response.getString("waktu_jemput"),
-                                    response.getString("waktu_sampai")
-                            );
-                            listOrder.add(item);*/
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -114,7 +104,8 @@ public class HistoryFragment extends Fragment {
 
                     @Override
                     public void onError(ANError error) {
-                        // handle error
+                        error.printStackTrace();
+                        System.out.println("list = error");
                     }
                 });
     }

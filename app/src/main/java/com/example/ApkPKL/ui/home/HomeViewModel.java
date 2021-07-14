@@ -1,16 +1,15 @@
-package com.example.ApkPKL.ui.aboutus;
+package com.example.ApkPKL.ui.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class AboutUsViewModel extends ViewModel {
+public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public AboutUsViewModel() {
+    public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Aplikasi ini merupakan produk Pengabdian Kepada Masyarakat DIPA Fakultas Ilmu Komputer Tahun 2020");
     }
 
     public LiveData<String> getText() {

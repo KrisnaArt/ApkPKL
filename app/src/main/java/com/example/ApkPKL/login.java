@@ -13,6 +13,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.ApkPKL.ui.MainActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -72,8 +73,7 @@ public class login extends AppCompatActivity {
         });
     }
 
-
-    public void goToMainActivity(){
+    private void goToMainActivity(){
         final String Username = username.getText().toString();
         profil(Username);
     }
@@ -99,16 +99,18 @@ public class login extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Intent i = new Intent(activity,MainActivity.class);
                             String Username = username.getText().toString();
                             Bundle bundle = new Bundle();
                             int id =response.getInt("id");
                             String lokasi = response.getString("lokasi");
                             String tipe = response.getString("jenis_ambulan");
+                            String status = response.getString("status");
                             bundle.putInt("ID", id);
                             bundle.putString("USERNAME", Username);
                             bundle.putString("LOK", lokasi);
                             bundle.putString("AMBULAN", tipe);
+                            bundle.putString("STATUS", status);
+                            Intent i = new Intent(activity, MainActivity.class);
                             i.putExtras(bundle);
                             emptyInputEditText();
                             activity.finish();

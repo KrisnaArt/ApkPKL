@@ -2,10 +2,8 @@ package com.example.ApkPKL.ui.maps;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -21,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +41,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.ApkPKL.App;
 import com.example.ApkPKL.R;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -80,17 +78,15 @@ import java.util.Date;
 public class MapsFragment extends Fragment {
 
     private MapsViewModel mapsViewModel;
-    private TextView namaP, kontakP, alamatP, ketP;
+    private TextView namaP, kontakP, alamatP, ketP, StatusA;
     private Button call, antar, finish;
-    private Switch tes;
     private int idFromIntent, idP;
     private double latitude, longitude, latitudeP, latitudePT, longitudeP, longitudePT;
-    private String namaFromIntent, status = "Off";
+    private String namaFromIntent, status;
     private static final int LOCATION_REQUEST_CODE = 1;
 
     FusedLocationProviderClient client;
     SupportMapFragment supportMapFragment;
-    SharedPreferences sharedPreferences;
     private static final String TAG = "MapsFragment";
 
     LocationRequest locationRequest;
@@ -116,8 +112,8 @@ public class MapsFragment extends Fragment {
     private Runnable mToastRunnable = new Runnable() {
         @Override
         public void run() {
-            getPasien(namaFromIntent);
-            mHandler.postDelayed(this, 5000);
+            profil();
+            mHandler.postDelayed(this, 10000);
         }
     };
 
@@ -130,12 +126,10 @@ public class MapsFragment extends Fragment {
         mHandler.removeCallbacks(mToastRunnable);
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mapsViewModel =
                 ViewModelProviders.of(this).get(MapsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_maps, container, false);
-
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         client = LocationServices.getFusedLocationProviderClient(getActivity());
         locationRequest = LocationRequest.create();
@@ -147,13 +141,13 @@ public class MapsFragment extends Fragment {
         locationRequest1.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         namaP = root.findViewById(R.id.namaP);
-        tes = root.findViewById(R.id.stat);
         kontakP = root.findViewById(R.id.kontakP);
         alamatP = root.findViewById(R.id.alamatP);
         ketP = root.findViewById(R.id.ketP);
         call = root.findViewById(R.id.call);
         finish = root.findViewById(R.id.finish);
         antar = root.findViewById(R.id.antar);
+        StatusA = root.findViewById(R.id.statusA);
 
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getLastLocation();
@@ -165,33 +159,7 @@ public class MapsFragment extends Fragment {
         idFromIntent = bundel.getInt("ID");
         namaFromIntent = bundel.getString("USERNAME");
 
-        sharedPreferences = getActivity().getSharedPreferences("save", Context.MODE_PRIVATE);
-        tes.setChecked(sharedPreferences.getBoolean("value", false));
-
-        tes.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (tes.isChecked()) {
-                status = "Ready";
-                if(status.equals("Ready")){
-                    startRepeating();
-                }
-                SharedPreferences.Editor editor = getActivity().getSharedPreferences("save", Context.MODE_PRIVATE).edit();
-                editor.putBoolean("value", true);
-                editor.apply();
-                tes.setChecked(true);
-                update(idFromIntent, latitude, longitude, status);
-                startLocationUpdates();
-            } else {
-                status = "Off";
-                stopRepeating();
-                update(idFromIntent, latitude, longitude, status);
-                SharedPreferences.Editor editor = getActivity().getSharedPreferences("save", Context.MODE_PRIVATE).edit();
-                editor.putBoolean("value", false);
-                editor.apply();
-                tes.setChecked(false);
-                empty();
-                stopLocationUpdates();
-            }
-        });
+        startRepeating();
 
         call.setOnClickListener(v -> {
             if(kontakP.getText().toString().isEmpty()){
@@ -222,6 +190,7 @@ public class MapsFragment extends Fragment {
             if(latitudeP == 0||longitudeP == 0){
                 openDialog();
             }else{
+                status = "Mengantar";
                 GoogleDirection.withServerKey("AIzaSyCAe8FKib8kPQMD7yUFJllVEjTWqPdnovw")
                         .from(new LatLng(latitudeP, longitudeP))
                         .to(new LatLng(latitudePT, longitudePT))
@@ -241,7 +210,7 @@ public class MapsFragment extends Fragment {
                                             googleMap.addPolyline(polylineOptions);
                                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16));
                                         } else {
-                                            System.out.println("error");
+                                            System.out.println("antar error");
                                         }
                                     });
                                     antar.setVisibility(View.INVISIBLE);
@@ -262,11 +231,11 @@ public class MapsFragment extends Fragment {
         });
 
         finish.setOnClickListener(v -> {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
             alertDialogBuilder.setMessage("Selesai");
             alertDialogBuilder.setPositiveButton("yes",
                     (arg0, arg1) -> {
-                        status = "Ready";
+                        status = "Pembersihan";
                         getLastLocation1();
                         updateWaktuSampaiPasien();
                         antar.setVisibility(View.VISIBLE);
@@ -274,6 +243,7 @@ public class MapsFragment extends Fragment {
                         startLocationUpdates1();
                         update(idFromIntent, latitude, longitude, status);
                         empty();
+                        Toast.makeText(App.getContext(),"Silahkan Menuju Ke Tab Home Untuk Mengubah Status",Toast.LENGTH_LONG).show();
                     });
             alertDialogBuilder.setNegativeButton("No", (dialog, which) -> {
 
@@ -286,7 +256,7 @@ public class MapsFragment extends Fragment {
     }
 
     private void update(int a, double b, double c, String d) {
-        AndroidNetworking.get("http://panggilambulan.my.id/api/updateAmbulan?id={id}&=ltd={ltd}&lgd={lgd}&status={status}&token={token}")
+        AndroidNetworking.get("http://panggilambulan.my.id/api/updateAmbulan?id={id}&ltd={ltd}&lgd={lgd}&status={status}&token={token}")
                 .addQueryParameter("id", String.valueOf(a))
                 .addQueryParameter("ltd", String.valueOf(b))
                 .addQueryParameter("lgd", String.valueOf(c))
@@ -303,7 +273,7 @@ public class MapsFragment extends Fragment {
                         } else if (d.equals("Menjemput")) {
                             Toast.makeText(getContext(), "Status : Menjemput", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getContext(), "Status : Off", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Status : " + response.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -315,7 +285,7 @@ public class MapsFragment extends Fragment {
     }
 
     private void update1(int a, double b, double c) {
-        AndroidNetworking.get("http://panggilambulan.my.id/api/updateAmbulan1?id={id}&=ltd={ltd}&lgd={lgd}&token={token}")
+        AndroidNetworking.get("http://panggilambulan.my.id/api/updateAmbulan1?id={id}&ltd={ltd}&lgd={lgd}&token={token}")
                 .addQueryParameter("id", String.valueOf(a))
                 .addQueryParameter("ltd", String.valueOf(b))
                 .addQueryParameter("lgd", String.valueOf(c))
@@ -336,10 +306,10 @@ public class MapsFragment extends Fragment {
                 });
     }
 
-    private void getPasien(String a) {
+    private void getPasien() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("y-M-d H:m:s");
         AndroidNetworking.get("http://panggilambulan.my.id/api/pasien?user_ambulan={user_ambulan}&token={token}")
-                .addQueryParameter("user_ambulan", a)
+                .addQueryParameter("user_ambulan", namaFromIntent)
                 .addQueryParameter("token", "mant4pgans")
                 .setTag(".testData")
                 .setPriority(Priority.HIGH)
@@ -356,7 +326,7 @@ public class MapsFragment extends Fragment {
                                 Date date2 = simpleDateFormat.parse("0000-00-00 00:00:00");
                                 if(date1.equals(date2)){
                                     stopRepeating();
-                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                                     alertDialogBuilder.setMessage("Ada Pasien Baru");
                                     alertDialogBuilder.setPositiveButton("yes", (arg0, arg1) -> {
                                         try {
@@ -385,17 +355,16 @@ public class MapsFragment extends Fragment {
                                     AlertDialog alertDialog = alertDialogBuilder.create();
                                     alertDialog.show();
                                 }else{
-                                    System.out.println("Error");
+                                    System.out.println("pasien = Error");
                                 }
                             }
                         } catch (JSONException | ParseException e) {
                             e.printStackTrace();
                         }
                     }
-
                     @Override
-                    public void onError(ANError error) {
-                        // handle error
+                    public void onError(ANError anError) {
+                        System.out.println("Error : "+ anError);
                     }
                 });
     }
@@ -422,8 +391,7 @@ public class MapsFragment extends Fragment {
     }
 
     private void checkSettingsAndStartLocationUpdates() {
-        LocationSettingsRequest request = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest).build();
+        LocationSettingsRequest request = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest).build();
         SettingsClient client = LocationServices.getSettingsClient(getActivity());
 
         Task<LocationSettingsResponse> locationSettingsResponseTask = client.checkLocationSettings(request);
@@ -444,7 +412,8 @@ public class MapsFragment extends Fragment {
     }
 
     private void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -458,7 +427,8 @@ public class MapsFragment extends Fragment {
     }
 
     private void startLocationUpdates1() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -510,6 +480,7 @@ public class MapsFragment extends Fragment {
             markerOptions.anchor((float)0.5,(float)0.5);
             googleMap.addMarker(markerOptions);
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
+            //update1(idFromIntent, latitude, longitude);
         }));
         locationTask.addOnFailureListener(e -> Log.e(TAG, "onFailure: " + e.getLocalizedMessage() ));
     }
@@ -572,10 +543,21 @@ public class MapsFragment extends Fragment {
     }
 
     public void makeCall(){
-        String s = "tel:"+ kontakP.getText().toString();
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse(s));
-        startActivity(callIntent);
+        if(status.equals("Menjemput")){
+            call.setText("Telfon Pasien");
+            String s = "tel:"+ kontakP.getText().toString();
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse(s));
+            startActivity(callIntent);
+        } else if(status.equals("Mengatar")){
+            call.setText("Telfon Perawat");
+            String s = "tel:"+ kontakP.getText().toString();
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse(s));
+            startActivity(callIntent);
+        } else{
+            call.setText("Telfon");
+        }
     }
 
     public void empty(){
@@ -626,5 +608,39 @@ public class MapsFragment extends Fragment {
     private void openDialog(){
         ClickDialog clickDialog = new ClickDialog();
         clickDialog.show(getFragmentManager(),"clickdialog");
+    }
+
+    public void profil(){
+        AndroidNetworking.get("http://panggilambulan.my.id/api/profil?nama={nama}&token={token}")
+                .addQueryParameter("nama", namaFromIntent)
+                .addQueryParameter("token", "mant4pgans")
+                .setTag(".Profil")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String stat = response.getString("status");
+                            StatusA.setText(stat);
+                            if (stat.equals("Ready")||stat.equals("Minta Persetujuan")) {
+                                update1(idFromIntent, latitude, longitude);
+                                getPasien();
+                                startLocationUpdates();
+                            } else{
+                                update1(idFromIntent, latitude, longitude);
+                                empty();
+                                stopLocationUpdates();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                    }
+                });
     }
 }
